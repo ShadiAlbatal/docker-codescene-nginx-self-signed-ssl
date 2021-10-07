@@ -1,47 +1,24 @@
 version: '3.2'
-
 services:
-
-reverseproxy:
-
-image: reverseproxy
-
-ports:
-
-- 443:443
-
-restart: always
-
-volumes:
-
-- "/etc/letsencrypt/:/letsencrypt"
-
-codescene:
-
-depends_on:
-
-- reverseproxy
-
-image: empear/codescene:latest
-
-# restart: always
-
-environment:
-
-- CODESCENE_DB_PATH=/configuration/empear.codescene
-
-- CODESCENE_ANALYSIS_RESULTS_ROOT=/codescene-data
-
-- CODESCENE_CLONED_REPOSITORIES_ROOT=/resources
-
-- CODESCENE_TIMEZONE=Europe/Stockholm
-
-- CODESCENE_LOG_LEVEL=DEBUG
-
-volumes:
-
-- "./docker-codescene/configuration:/configuration"
-
-- "./docker-codescene/codescene-data:/codescene-data"
-
-- "./docker-codescene/resources:/resources"
+    reverseproxy:
+        image: reverseproxy
+        ports:
+            - 443:443
+        restart: always
+        volumes:
+            - "/etc/letsencrypt/:/letsencrypt"
+    codescene:
+        depends_on:
+            - reverseproxy
+        image: empear/codescene:latest
+        # restart: always
+        environment:
+            - CODESCENE_DB_PATH=/configuration/empear.codescene
+            - CODESCENE_ANALYSIS_RESULTS_ROOT=/codescene-data
+            - CODESCENE_CLONED_REPOSITORIES_ROOT=/resources
+            - CODESCENE_TIMEZONE=Europe/Stockholm
+            - CODESCENE_LOG_LEVEL=DEBUG
+        volumes:
+            - "./docker-codescene/configuration:/configuration"
+            - "./docker-codescene/codescene-data:/codescene-data"
+            - "./docker-codescene/resources:/resources"
