@@ -14,8 +14,11 @@ echo "----------------------------------------------------------"
 echo "repository universe"
 sudo add-apt-repository universe
 echo "----------------------------------------------------------"
-echo "install docker"
+echo "install docker, docker-compose"
 sudo apt install docker.io -y && sudo apt install docker-compose -y
+echo "----------------------------------------------------------"
+echo "install mariadb-server, mariadb-client"
+sudo apt install mariadb-server -y && sudo apt install mariadb-client -y
 echo "----------------------------------------------------------"
 echo "sudo snap install core; sudo snap refresh core"
 sudo snap install core; sudo snap refresh core
@@ -43,28 +46,21 @@ echo "----------------------------------------------------------"
 echo "copy docker-compose to user dir"
 cp initial-files/docker-compose.yml /home/$USER/docker-compose.yml /home/$USER
 echo "----------------------------------------------------------"
-echo "create codescene"
+echo "creating codescene at user dir"
 mkdir -p /home/$USER/codescene
-
-echo "to issue a ssl-cert, provide the following data, and answer the question"
-echo "email"
-read email
-echo "dns"
-read dns
-
-echo $email
-echo $dns
-
-certbot certonly --standalone -d $dns --email $email
-
-
-filename="/home/azureuser/sda/df/gg/nginx.conf"
-
-read -p "Enter the replace string: " replace
-
-string="**domain_name**"
-
-if [[ $string != "" && $replace != "" ]]; then
-sed -i "s/$string/$dns/" $filename
-#echo "succ"
-fi
+ll /home/$USER/codescene
+#read email
+#echo $email
+echo "----------------------------------------------------------"
+read -p "Enter your dns: " dns
+echo "issuing your ssl-cert"
+echo sudo certbot certonly --standalone -d $dns
+sudo certbot certonly --standalone -d $dns
+echo "----------------------------------------------------------"
+echo "adding your dns to source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx/nginx.conf"
+file="source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx/nginx.conf"
+#sudo replace "**domain_name**" $replace -- source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx/nginx.conf
+sudo replace "**domain_name**" $replace -- $file
+echo "----------------------------------------------------------"
+echo "review the dns if correctly added to file"
+cat source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx/nginx.conf
