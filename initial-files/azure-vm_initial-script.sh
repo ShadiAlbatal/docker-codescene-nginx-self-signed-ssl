@@ -1,7 +1,6 @@
 #!/bin/bash -i
 
-echo ""
-#cd /home/$user
+echo "CodeScene"
 echo "update"
 sudo apt update -y
 echo "----------------------------------------------------------"
@@ -31,26 +30,16 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot
 echo "mkdir src , enter it"
 mkdir source
 cd source
-#pwd
 echo "mkdir repos , enter it"
 mkdir repos
 cd repos
 echo "----------------------------------------------------------"
 echo "git clone"
-sudo git clone https://github.com/ShadiAlbatal/docker-codescene-nginx-self-signed-ssl.git
+https://gitlab.com/Shadi.Albatal.SyVe/docker-codescene-nginx-self-signed-ssl.git
 echo "cd  docker-codescene-nginx-self-signed-ssl"
 cd docker-codescene-nginx-self-signed-ssl/
 echo "checkout  using_letsencrypt_ssl"
 git checkout using_letsencrypt_ssl
-echo "----------------------------------------------------------"
-echo "copy docker-compose to user dir"
-cp initial-files/docker-compose.yml /home/$USER/docker-compose.yml /home/$USER
-echo "----------------------------------------------------------"
-echo "creating codescene at user dir"
-mkdir -p /home/$USER/codescene
-ll /home/$USER/codescene
-#read email
-#echo $email
 echo "----------------------------------------------------------"
 read -p "Enter your dns: " dns
 echo "issuing your ssl-cert"
@@ -58,9 +47,44 @@ echo sudo certbot certonly --standalone -d $dns
 sudo certbot certonly --standalone -d $dns
 echo "----------------------------------------------------------"
 echo "adding your dns to source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx/nginx.conf"
-file="source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx/nginx.conf"
-#sudo replace "**domain_name**" $replace -- source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx/nginx.conf
-sudo replace "**domain_name**" $replace -- $file
+pwd
+cd docker-nginx
+pwd
+ll
+cat nginx.conf
+sudo replace "**domain_name**" $dns -- nginx.conf
 echo "----------------------------------------------------------"
 echo "review the dns if correctly added to file"
-cat source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx/nginx.conf
+cat nginx.conf
+echo "----------------------------------------------------------"
+echo "going to /home/user"
+cd /home/$USER
+pwd
+ll
+echo "----------------------------------------------------------"
+echo "creating codescene at user dir"
+mkdir codescene
+ll /home/$USER
+echo "----------------------------------------------------------"
+echo "copy docker-compose to user dir"
+cp /home/azureuser/source/repos/docker-codescene-nginx-self-signed-ssl/initial-files/docker-compose.yml .
+pwd
+ll
+echo "----------------------------------------------------------"
+echo  "sudo docker build -t reverseproxy source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx"
+sudo docker build -t reverseproxy source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx
+echo "----------------------------------------------------------"
+echo "docker-compose up -d"
+sudo docker-compose up -d
+pwd
+ls
+echo "----------------------------------------------------------"
+echo "sudo chown -R 999 docker-codescene/*"
+sudo chown -R 999 docker-codescene/*
+echo "----------------------------------------------------------"
+echo "sudo docker-compose down"
+sudo docker-compose down
+echo "----------------------------------------------------------"
+echo "sudo docker-compose up -d --force-recreate"
+sudo docker-compose up -d --force-recreate
+echo "---------------------------FINISH---------------------------"
