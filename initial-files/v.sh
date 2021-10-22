@@ -1,4 +1,5 @@
 #!/bin/bash -i
+
 echo "CodeScene"
 echo "update"
 sudo apt update -y
@@ -86,4 +87,5 @@ sudo docker-compose down
 echo "----------------------------------------------------------"
 echo "sudo docker-compose up -d --force-recreate"
 sudo docker-compose up -d --force-recreate
+
 echo "---------------------------FINISH---------------------------"

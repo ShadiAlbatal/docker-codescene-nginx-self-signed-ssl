@@ -1,5 +1,7 @@
 #!/bin/bash -i
-echo "CodeScene"
+
+echo ""
+cd /home/$user
 echo "update"
 sudo apt update -y
 echo "----------------------------------------------------------"
@@ -29,12 +31,13 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot
 echo "mkdir src , enter it"
 mkdir source
 cd source
+#pwd
 echo "mkdir repos , enter it"
 mkdir repos
 cd repos
 echo "----------------------------------------------------------"
 echo "git clone"
-https://gitlab.com/Shadi.Albatal.SyVe/docker-codescene-nginx-self-signed-ssl.git
+git clone https://github.com/ShadiAlbatal/docker-codescene-nginx-self-signed-ssl.git
 echo "cd  docker-codescene-nginx-self-signed-ssl"
 cd docker-codescene-nginx-self-signed-ssl/
 echo "checkout  using_letsencrypt_ssl"
@@ -70,20 +73,3 @@ cp /home/azureuser/source/repos/docker-codescene-nginx-self-signed-ssl/initial-f
 pwd
 ll
 echo "----------------------------------------------------------"
-echo  "sudo docker build -t reverseproxy source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx"
-sudo docker build -t reverseproxy source/repos/docker-codescene-nginx-self-signed-ssl/docker-nginx
-echo "----------------------------------------------------------"
-echo "docker-compose up -d"
-sudo docker-compose up -d
-pwd
-ls
-echo "----------------------------------------------------------"
-echo "sudo chown -R 999 docker-codescene/*"
-sudo chown -R 999 docker-codescene/*
-echo "----------------------------------------------------------"
-echo "sudo docker-compose down"
-sudo docker-compose down
-echo "----------------------------------------------------------"
-echo "sudo docker-compose up -d --force-recreate"
-sudo docker-compose up -d --force-recreate
-echo "---------------------------FINISH---------------------------"
